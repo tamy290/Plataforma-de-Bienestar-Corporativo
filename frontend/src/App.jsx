@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Registro from './auth/Registro';
 import Login from './auth/Login';
 import Header from './shared/Header';
-import Footer from './shared/Footer';  // Correct import for Footer
+import Footer from './shared/Footer';
 import NotFound from './shared/NotFound';
+import DashboardFuncionario from './funcionario/DashboardEmpleado';
 
 const App = () => {
     return (
@@ -17,7 +18,8 @@ const App = () => {
                         <Route path="/" element={<h2>Bienvenido a la Plataforma de Bienestar Corporativo</h2>} />
                         <Route path="/registro" element={<Registro />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="*" element={<NotFound />} />  {/* Adding NotFound for unmatched routes */}
+                        <Route path="/dashboard" element={<DashboardFuncionario />} />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>
                 <Footer /> 
@@ -27,8 +29,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-

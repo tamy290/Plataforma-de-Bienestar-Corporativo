@@ -1,4 +1,3 @@
-// src/pages/Shared/Footer.jsx
 import React from 'react';
 import { Container } from 'react-bootstrap';
 

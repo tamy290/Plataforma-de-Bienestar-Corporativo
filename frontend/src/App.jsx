@@ -8,6 +8,7 @@ import Footer from './shared/Footer';
 import NotFound from './shared/NotFound';
 import DashboardFuncionario from './funcionario/DashboardEmpleado';
 import FichaSaludPage from './funcionario/FichaSaludPage';
+import DiarioEmocionalPage from './funcionario/DiarioEmocionalPage';
 
 const App = () => {
     return (
@@ -20,7 +21,8 @@ const App = () => {
                         <Route path="/registro" element={<Registro />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<DashboardFuncionario />} />
-                        <Route path="/ficha-salud" element={<FichaSaludPage />} />
+                        <Route path="/ficha-salud" element={<FichaSaludPage/>} />
+                        <Route path="/diario-emocional" element={<DiarioEmocionalPage />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

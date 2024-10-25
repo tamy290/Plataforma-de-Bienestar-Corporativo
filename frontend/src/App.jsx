@@ -7,6 +7,7 @@ import Header from './shared/Header';
 import Footer from './shared/Footer';
 import NotFound from './shared/NotFound';
 import DashboardFuncionario from './funcionario/DashboardEmpleado';
+import FichaSaludPage from './funcionario/FichaSaludPage';
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                         <Route path="/registro" element={<Registro />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<DashboardFuncionario />} />
+                        <Route path="/ficha-salud" element={<FichaSaludPage />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

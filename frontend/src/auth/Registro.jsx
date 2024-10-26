@@ -42,7 +42,7 @@ const Registro = () => {
         };
 
         try {
-            const response = await fetch('/api/users', {
+            const response = await fetch('http://localhost:3001/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Encabezado JSON

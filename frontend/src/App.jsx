@@ -13,6 +13,7 @@ import ProgresoPage from './funcionario/ProgresoPage';
 import NotificacionesPage from './funcionario/NotificacionesPage';
 import DashboardPsicólogo from './Psicólogo/DashboardPsicólogo';
 import FichaSaludFuncionario from './Psicólogo/FichaSaludFuncionario';
+import HistorialFuncionario from './Psicólogo/HistorialFuncionario';
 
 const App = () => {
     return (
@@ -31,6 +32,7 @@ const App = () => {
                         <Route path="/notificaciones" element={<NotificacionesPage />}/>
                         <Route path="/psicologo/dashboard" element={<DashboardPsicólogo/>}/>
                         <Route path="/psicologo/ficha-salud" element={<FichaSaludFuncionario />} />
+                        <Route path="/psicologo/historial-funcionario" element={<HistorialFuncionario />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

@@ -33,17 +33,21 @@ const Registro = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('nombre', nombre);
-        formData.append('apellido', apellido);
-        formData.append('email', email);
-        formData.append('contraseña', contraseña);
-        formData.append('rol', rol);
+        const formData = {
+            nombre,
+            apellido,
+            email,
+            contraseña,
+            rol,
+        };
 
         try {
-            const response = await fetch('/api/registro', {
+            const response = await fetch('/api/users', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json', // Encabezado JSON
+                },
+                body: JSON.stringify(formData), // Convertir el objeto a JSON
             });
 
             if (!response.ok) {

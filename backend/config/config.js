@@ -8,7 +8,7 @@ const URI_MONGODB = process.env.MONGODB_URI;
 async function conectarDB() {
     try {
         await mongoose.connect(URI_MONGODB, {
-        dbName: 'Examen2DB',
+        dbName: 'UserDB',
         });
         console.log("¡Conexión exitosa a MongoDB!");
     } catch (error) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Registro from './auth/Registro';
-import Login from './auth/Login';
+import Login from './auth/login';
 import Header from './shared/Header';
 import Footer from './shared/Footer';
 import NotFound from './shared/NotFound';

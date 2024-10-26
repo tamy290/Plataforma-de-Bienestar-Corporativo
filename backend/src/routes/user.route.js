@@ -1,7 +1,8 @@
 //importaciones
 import express from 'express';
-const router = express.Router();
 import userController from '../controllers/user.controller.js';
+
+const router = express.Router();
 
 //crear user
 router.post("/", userController.create)

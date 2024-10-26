@@ -4,22 +4,26 @@ import { Form, Button, Container, Alert } from 'react-bootstrap';
 
 const Login = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [contraseña, setContraseña] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password);
+        const formData = {
+            email,
+            contraseña
+        };
 
         try {
             // Aquí puedes manejar el inicio de sesión, enviando los datos al servidor
-            const response = await fetch('/api/login', {
+            const response = await fetch('/api/session', {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json', // Encabezado JSON
+                },
+                body: JSON.stringify(formData), // Convertir el objeto a JSON
             });
 
             if (!response.ok) {
@@ -30,7 +34,7 @@ const Login = () => {
             console.log('Inicio de sesión exitoso');
             // Resetear el formulario
             setEmail('');
-            setPassword('');
+            setContraseña('');
         } catch (error) {
             setError(error.message);
         }
@@ -56,8 +60,8 @@ const Login = () => {
                     <Form.Control
                         type="password"
                         placeholder="Ingresa tu contraseña"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={contraseña}
+                        onChange={(e) => setContraseña(e.target.value)}
                         required
                     />
                 </Form.Group>
@@ -69,4 +73,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Login;

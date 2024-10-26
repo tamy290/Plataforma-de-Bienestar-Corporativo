@@ -15,6 +15,7 @@ import DashboardPsicólogo from './Psicólogo/DashboardPsicólogo';
 import FichaSaludFuncionario from './Psicólogo/FichaSaludFuncionario';
 import HistorialFuncionario from './Psicólogo/HistorialFuncionario';
 import ReportesBienestar from './Psicólogo/ReportesBienestar';
+import SesionesVideo from './Psicólogo/SesionesVideos';
 
 const App = () => {
     return (
@@ -35,6 +36,7 @@ const App = () => {
                         <Route path="/psicologo/ficha-salud" element={<FichaSaludFuncionario />} />
                         <Route path="/psicologo/historial-funcionario" element={<HistorialFuncionario/>}/>
                         <Route path="/psicologo/reportes-bienestar" element={<ReportesBienestar />} />
+                        <Route path="/sesiones-video" element={<SesionesVideo />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

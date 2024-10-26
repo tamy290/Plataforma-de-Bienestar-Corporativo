@@ -6,6 +6,7 @@ const login = async (req, res) => {
     //Validemos el usuario y la contraseña
     try {
         const { email, contraseña } = req.body;
+        console.log(req.body);
         const user = await User.findOne({ email }); //Buscamos el usuario por email
         if (!user) {    //Si no existe el usuario
             res.status(401).json({
@@ -30,7 +31,7 @@ const login = async (req, res) => {
             return;
         }
         //Generamos el token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id, role: user.rol }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         res.status(200)     //Enviamos el estado 200
             .cookie("userToken", token, { httpOnly: true }) //Enviamos el token en una cookie

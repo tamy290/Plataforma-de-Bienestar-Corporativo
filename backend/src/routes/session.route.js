@@ -5,10 +5,10 @@ import authenticate from '../../config/jwt.config.js';
 const router = express.Router();
 
 //LOGIN
-router.post("/", sessionController.login);
+router.post("/login", sessionController.login);
 //LOGOUT
-router.post("/", sessionController.logout);
+router.post("/logout", sessionController.logout);
 //SESSION
-router.get("/", authenticate, sessionController.session);
+router.get("/session", authenticate(["funcionario", "psicologa", "admin"]), sessionController.session);
 
 export default router;

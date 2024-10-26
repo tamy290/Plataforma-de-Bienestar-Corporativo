@@ -17,16 +17,18 @@ const Login = () => {
 
         try {
             // Aquí puedes manejar el inicio de sesión, enviando los datos al servidor
-            const response = await fetch('/api/session', {
+            const response = await fetch('/api/session/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Encabezado JSON
                 },
+                credentials: 'include', // Permite el envío y recepción de cookies
                 body: JSON.stringify(formData), // Convertir el objeto a JSON
             });
 
             if (!response.ok) {
-                throw new Error('Error en el inicio de sesión');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
 
             // Manejo de respuesta exitosa

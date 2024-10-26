@@ -12,6 +12,7 @@ import DiarioEmocionalPage from './funcionario/DiarioEmocionalPage';
 import ProgresoPage from './funcionario/ProgresoPage';
 import NotificacionesPage from './funcionario/NotificacionesPage';
 import DashboardPsicólogo from './Psicólogo/DashboardPsicólogo';
+import FichaSaludFuncionario from './Psicólogo/FichaSaludFuncionario';
 
 const App = () => {
     return (
@@ -28,7 +29,8 @@ const App = () => {
                         <Route path="/diario-emocional" element={<DiarioEmocionalPage />} />
                         <Route path="/progreso" element={<ProgresoPage/>}/>
                         <Route path="/notificaciones" element={<NotificacionesPage />}/>
-                        <Route path="/psicologo/dashboard" element={<DashboardPsicólogo />} />
+                        <Route path="/psicologo/dashboard" element={<DashboardPsicólogo/>}/>
+                        <Route path="/psicologo/ficha-salud" element={<FichaSaludFuncionario />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

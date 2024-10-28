@@ -48,31 +48,29 @@ const Registro = () => {
             const response = await fetch('http://localhost:3001/api/users', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Encabezado JSON
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData), // Convertir el objeto a JSON
+                body: JSON.stringify(formData),
             });
 
-            const data = await response.json();
-            if(response.ok){
-                //Redirige según el rol
-                navigate(data.redirectPath);
-            }
-
+            // Verifica el estado de la respuesta antes de intentar leerla
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Error en el registro');
             }
 
-            // Confirmar registro exitoso
-            console.log('Registro exitoso');
-            // Resetear el formulario
+            // Si la respuesta es exitosa
+            const data = await response.json();
+            navigate(data.redirectPath || '/dashboard'); // Redirección según el rol o ruta por defecto
+
+            // Resetear el formulario tras registro exitoso
             setNombre('');
             setApellido('');
             setEmail('');
             setContraseña('');
             setConfirmarContraseña(''); 
             setRol('');
+            setError(''); // Limpiar cualquier error previo
         } catch (error) {
             setError(error.message);
         }

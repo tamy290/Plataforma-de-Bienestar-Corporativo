@@ -6,8 +6,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 //Importaciones de rutas
-import userRoute from "./src/routes/user.route.js";
-import sessionRoutes from './src/routes/session.route.js'
+import userRoute from './src/routes/user.route.js';
+import sessionRoutes from './src/routes/session.route.js';
+import fichaRoute from './src/routes/ficha.route.js';
 
 dotenv.config();    
 const app = express();
@@ -26,6 +27,7 @@ app.use(cors(
 //USO DE RUTAS
 app.use("/api/users", userRoute);
 app.use("/api/session", sessionRoutes);
+app.use("/api/ficha", fichaRoute);
 
 dbConnect();
 

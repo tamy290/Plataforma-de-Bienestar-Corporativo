@@ -1,11 +1,13 @@
 // src/pages/Auth/Login.jsx
 import React, { useState } from 'react';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [contraseña, setContraseña] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,16 +29,22 @@ const Login = () => {
                 body: JSON.stringify(formData), // Convertir el objeto a JSON
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
+            // Verificar si la respuesta fue exitosa
+            if (response.ok) {
+                const data = await response.json(); // Leer el cuerpo de la respuesta
+                // Redirige según el rol
+                navigate(data.redirectPath);
+
+                // Manejo de respuesta exitosa
+                console.log('Inicio de sesión exitoso');
+                // Resetear el formulario
+                setEmail('');
+                setContraseña('');
+            } else {
+                // Manejar errores
+                const errorData = await response.json(); // Leer el cuerpo de error
                 throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
-
-            // Manejo de respuesta exitosa
-            console.log('Inicio de sesión exitoso');
-            // Resetear el formulario
-            setEmail('');
-            setContraseña('');
         } catch (error) {
             setError(error.message);
         }

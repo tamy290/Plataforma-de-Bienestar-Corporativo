@@ -7,7 +7,7 @@ const router = express.Router();
 //LOGIN
 router.post("/login", sessionController.login);
 //LOGOUT
-router.post("/logout", sessionController.logout);
+router.post("/logout", authenticate(["funcionario", "psicologa", "admin"]), sessionController.logout);
 //SESSION
 router.get("/session", authenticate(["funcionario", "psicologa", "admin"]), sessionController.session);
 

@@ -32,10 +32,10 @@ const App = () => {
                         <Route path="/diario-emocional" element={<DiarioEmocionalPage />} />
                         <Route path="/progreso" element={<ProgresoPage/>}/>
                         <Route path="/notificaciones" element={<NotificacionesPage />}/>
-                        <Route path="/psicologo/dashboard" element={<DashboardPsicólogo/>}/>
-                        <Route path="/psicologo/ficha-salud" element={<FichaSaludFuncionario />} />
-                        <Route path="/psicologo/historial-funcionario" element={<HistorialFuncionario/>}/>
-                        <Route path="/psicologo/reportes-bienestar" element={<ReportesBienestar />} />
+                        <Route path="/psicologa/dashboard" element={<DashboardPsicólogo/>}/>
+                        <Route path="/psicologa/ficha-salud" element={<FichaSaludFuncionario />} />
+                        <Route path="/psicologa/historial-funcionario" element={<HistorialFuncionario/>}/>
+                        <Route path="/psicologa/reportes-bienestar" element={<ReportesBienestar />} />
                         <Route path="/sesiones-video" element={<SesionesVideo />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>

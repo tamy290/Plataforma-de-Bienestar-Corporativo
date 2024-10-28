@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Registro = () => {
     const [nombre, setNombre] = useState('');
@@ -9,6 +10,8 @@ const Registro = () => {
     const [confirmarContraseña, setConfirmarContraseña] = useState('');
     const [rol, setRol] = useState('');
     const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,6 +52,12 @@ const Registro = () => {
                 },
                 body: JSON.stringify(formData), // Convertir el objeto a JSON
             });
+
+            const data = await response.json();
+            if(response.ok){
+                //Redirige según el rol
+                navigate(data.redirectPath);
+            }
 
             if (!response.ok) {
                 const errorData = await response.json();

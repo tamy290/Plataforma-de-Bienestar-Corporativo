@@ -21,7 +21,7 @@ const DiarioEmocionalPage = () => {
             setLoading(true);
             const token = localStorage.getItem('authToken');
             try {
-                const response = await axios.get('http://localhost:3001/api/diario-emocional', {
+                const response = await axios.get('/api/diario-emocional', {
                     headers: { 'Authorization': `Bearer ${token}` },
                     withCredentials: true,
                 });

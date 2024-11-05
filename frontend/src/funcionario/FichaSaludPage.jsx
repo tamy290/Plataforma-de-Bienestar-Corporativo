@@ -36,7 +36,7 @@ const FichaSaludPage = () => {
     const fetchFichaSalud = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3001/api/ficha', { withCredentials: true });
+        const response = await axios.get('/api/ficha', { withCredentials: true });
         if (response.data) {
           setFormData(response.data);
           setFichaCompleta(true);

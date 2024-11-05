@@ -10,7 +10,7 @@ const FichaSaludFuncionario = () => {
   useEffect(() => {
     const fetchFichaSalud = async () => {
       try {
-        const response = await axios.get('https://localhost:3001/api/psicologa/ficha-salud');
+        const response = await axios.get('http://localhost:3001/api/psicologo/ficha-salud');
         setFichaSalud(response.data);
       } catch (err) {
         setError('No se pudo cargar la ficha de salud del empleado.');

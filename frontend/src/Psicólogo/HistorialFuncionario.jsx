@@ -12,7 +12,7 @@ const HistorialFuncionario = () => {
   useEffect(() => {
     const fetchHistorial = async () => {
       try {
-        const response = await axios.get('https://localhost:3001/api/psicologa/historial');
+        const response = await axios.get('http://localhost:3001/api/psicologo/historial');
         setHistorial(response.data);
       } catch (err) {
         setError('No se pudo cargar el historial. Intenta nuevamente más tarde.');

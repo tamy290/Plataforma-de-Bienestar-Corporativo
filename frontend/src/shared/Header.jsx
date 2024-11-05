@@ -4,34 +4,27 @@ import { Navbar, Nav, Button } from 'react-bootstrap';
 
 const Header = () => {
     const navigate = useNavigate();
-
-    // Verifica si hay un token en el almacenamiento local
     const isAuthenticated = !!localStorage.getItem('token');
 
     const handleLogout = () => {
-        // Elimina el token para cerrar la sesión
         localStorage.removeItem('token');
-        // Redirige al usuario a la página de inicio de sesión
         navigate('/login');
     };
 
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" className="shadow-sm">
             <Navbar.Brand 
                 style={{ 
                     fontFamily: 'Montserrat, sans-serif', 
                     fontWeight: 'bold', 
-                    backgroundColor: '#F5F5F5',
-                    padding: '5px 10px',
-                    borderRadius: '5px'
+                    color: '#4CAF50' 
                 }}
             >
-                <span style={{ color: '#4CAF50' }}>Vita</span>
-                <span style={{ color: '#009688' }}>Lab</span>
+                <span>Vita</span><span style={{ color: '#009688' }}>Lab</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ms-auto">
+                <Nav className="ms-auto py-2 px-2"> {/* Agregado padding vertical y horizontal */}
                     {isAuthenticated ? (
                         <Button variant="outline-danger" onClick={handleLogout}>
                             Cerrar Sesión
@@ -53,6 +46,7 @@ const Header = () => {
 };
 
 export default Header;
+
 
 
 

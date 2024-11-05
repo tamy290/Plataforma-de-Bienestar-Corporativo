@@ -1,17 +1,18 @@
-// src/pages/Auth/Login.jsx
 import React, { useState } from 'react';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [contraseña, setContraseña] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false); // Estado de carga
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true); // Iniciar carga
 
         const formData = {
             email,
@@ -19,34 +20,29 @@ const Login = () => {
         };
 
         try {
-            // Aquí puedes manejar el inicio de sesión, enviando los datos al servidor
             const response = await fetch('/api/session/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Encabezado JSON
+                    'Content-Type': 'application/json',
                 },
-                credentials: 'include', // Permite el envío y recepción de cookies
-                body: JSON.stringify(formData), // Convertir el objeto a JSON
+                credentials: 'include',
+                body: JSON.stringify(formData),
             });
 
-            // Verificar si la respuesta fue exitosa
             if (response.ok) {
-                const data = await response.json(); // Leer el cuerpo de la respuesta
-                // Redirige según el rol
+                const data = await response.json();
                 navigate(data.redirectPath);
-
-                // Manejo de respuesta exitosa
                 console.log('Inicio de sesión exitoso');
-                // Resetear el formulario
                 setEmail('');
                 setContraseña('');
             } else {
-                // Manejar errores
-                const errorData = await response.json(); // Leer el cuerpo de error
+                const errorData = await response.json();
                 throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
         } catch (error) {
             setError(error.message);
+        } finally {
+            setLoading(false); // Detener carga
         }
     };
 
@@ -75,8 +71,8 @@ const Login = () => {
                         required
                     />
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                    Iniciar Sesión
+                <Button variant="primary" type="submit" disabled={loading}>
+                    {loading ? <Spinner animation="border" size="sm" /> : 'Iniciar Sesión'}
                 </Button>
             </Form>
         </Container>

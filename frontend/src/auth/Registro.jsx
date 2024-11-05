@@ -53,24 +53,21 @@ const Registro = () => {
                 body: JSON.stringify(formData),
             });
 
-            // Verifica el estado de la respuesta antes de intentar leerla
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Error en el registro');
             }
 
-            // Si la respuesta es exitosa
             const data = await response.json();
-            navigate(data.redirectPath || '/dashboard'); // Redirección según el rol o ruta por defecto
+            navigate(data.redirectPath || '/dashboard');
 
-            // Resetear el formulario tras registro exitoso
             setNombre('');
             setApellido('');
             setEmail('');
             setContraseña('');
             setConfirmarContraseña(''); 
             setRol('');
-            setError(''); // Limpiar cualquier error previo
+            setError('');
         } catch (error) {
             setError(error.message);
         }
@@ -111,7 +108,7 @@ const Registro = () => {
                     >
                         <option value="">Selecciona un rol</option>
                         <option value="funcionario">Funcionario</option>
-                        <option value="psicologa">Psicóloga</option>
+                        <option value="psicologo">Psicólogo</option>
                         <option value="admin">Admin</option>
                     </Form.Control>
                 </Form.Group>
@@ -133,6 +130,7 @@ const Registro = () => {
                         value={contraseña}
                         onChange={(e) => setContraseña(e.target.value)} 
                         required
+                        autoComplete="new-password"
                     />
                 </Form.Group>
                 <Form.Group controlId="formConfirmarContraseña">
@@ -143,6 +141,7 @@ const Registro = () => {
                         value={confirmarContraseña}
                         onChange={(e) => setConfirmarContraseña(e.target.value)} 
                         required
+                        autoComplete="new-password"
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit">
@@ -154,3 +153,4 @@ const Registro = () => {
 };
 
 export default Registro;
+

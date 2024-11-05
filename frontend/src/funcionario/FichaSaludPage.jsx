@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
@@ -21,15 +21,35 @@ const FichaSaludPage = () => {
     tratamientoPsicologico: 'no',
     tratamientoDetalle: '',
   });
-
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [fichaCompleta, setFichaCompleta] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  useEffect(() => {
+    const fetchFichaSalud = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:3001/api/ficha', { withCredentials: true });
+        if (response.data) {
+          setFormData(response.data);
+          setFichaCompleta(true);
+        }
+      } catch (err) {
+        console.error('Error al cargar la ficha de salud:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFichaSalud();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,31 +58,22 @@ const FichaSaludPage = () => {
     setSuccess(null);
 
     try {
-      // Cambia esta URL por la de tu backend
-      const response = await axios.post('https://localhost:3001/api/ficha-salud', formData);
+      const token = localStorage.getItem('authToken');
 
-      // Si la respuesta es exitosa
+      const response = await axios.post(
+        'http://localhost:3001/api/ficha',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
       if (response.status === 200) {
         setSuccess('Ficha de salud enviada exitosamente.');
-        // Limpiar el formulario si es necesario
-        setFormData({
-          nombre: '',
-          apellido: '',
-          fechaNacimiento: '',
-          genero: '',
-          domicilio: '',
-          telefono: '',
-          correo: '',
-          contactoEmergencia: '',
-          alergias: '',
-          medicacionActual: 'no',
-          medicacionDetalle: '',
-          historialEnfermedades: '',
-          condicionesPreexistentes: '',
-          tipoSangre: '',
-          tratamientoPsicologico: 'no',
-          tratamientoDetalle: '',
-        });
+        setFichaCompleta(true);
       }
     } catch (err) {
       console.error('Error al enviar la ficha de salud:', err);
@@ -72,12 +83,47 @@ const FichaSaludPage = () => {
     }
   };
 
+  const handleEdit = () => {
+    // Restablecer el formulario con los datos existentes
+    setFichaCompleta(false);
+  };
+
+  if (fichaCompleta) {
+    return (
+      <Container>
+        <h2>Resumen del Historial Médico</h2>
+        <ul>
+          <li><strong>Nombre:</strong> {formData.nombre}</li>
+          <li><strong>Apellido:</strong> {formData.apellido}</li>
+          <li><strong>Fecha de Nacimiento:</strong> {formData.fechaNacimiento}</li>
+          <li><strong>Género:</strong> {formData.genero}</li>
+          <li><strong>Domicilio:</strong> {formData.domicilio}</li>
+          <li><strong>Teléfono:</strong> {formData.telefono}</li>
+          <li><strong>Correo Electrónico:</strong> {formData.correo}</li>
+          <li><strong>Contacto de Emergencia:</strong> {formData.contactoEmergencia}</li>
+          <li><strong>Alergias:</strong> {formData.alergias}</li>
+          <li><strong>Historial de Enfermedades:</strong> {formData.historialEnfermedades}</li>
+          <li><strong>Condiciones Preexistentes:</strong> {formData.condicionesPreexistentes}</li>
+          <li><strong>Tipo de Sangre:</strong> {formData.tipoSangre}</li>
+          <li><strong>Tratamiento Psicológico:</strong> {formData.tratamientoPsicologico === 'si' ? 'Sí' : 'No'}</li>
+          {formData.tratamientoPsicologico === 'si' && (
+            <li><strong>Detalle de Tratamiento:</strong> {formData.tratamientoDetalle}</li>
+          )}
+        </ul>
+        <Button variant="primary" onClick={handleEdit}>
+          Editar Ficha
+        </Button>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <h1>Ficha de Salud</h1>
       {error && <div className="alert alert-danger">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
       <Form onSubmit={handleSubmit}>
+        
         <Row>
           <Col md={6}>
             <Form.Group controlId="nombre">
@@ -185,6 +231,7 @@ const FichaSaludPage = () => {
             name="alergias"
             value={formData.alergias}
             onChange={handleChange}
+            required
           />
         </Form.Group>
 
@@ -226,6 +273,7 @@ const FichaSaludPage = () => {
             name="historialEnfermedades"
             value={formData.historialEnfermedades}
             onChange={handleChange}
+            required
           />
         </Form.Group>
 
@@ -236,6 +284,7 @@ const FichaSaludPage = () => {
             name="condicionesPreexistentes"
             value={formData.condicionesPreexistentes}
             onChange={handleChange}
+            required
           />
         </Form.Group>
 
@@ -246,30 +295,33 @@ const FichaSaludPage = () => {
             name="tipoSangre"
             value={formData.tipoSangre}
             onChange={handleChange}
+            required
           />
         </Form.Group>
 
         <Form.Group controlId="tratamientoPsicologico">
-          <Form.Label>Tratamiento Psicológico</Form.Label>
-          <Form.Check
-            type="radio"
-            label="Sí"
-            name="tratamientoPsicologico"
-            value="si"
-            checked={formData.tratamientoPsicologico === 'si'}
-            onChange={handleChange}
-          />
-          <Form.Check
-            type="radio"
-            label="No"
-            name="tratamientoPsicologico"
-            value="no"
-            checked={formData.tratamientoPsicologico === 'no'}
-            onChange={handleChange}
-          />
+            <Form.Label>¿Recibe Tratamiento Psicológico?</Form.Label>
+            <Form.Check
+              type="radio"
+              label="Sí"
+              name="tratamientoPsicologico"
+              value="si"
+              checked={formData.tratamientoPsicologico === 'si'}
+              onChange={handleChange}
+            />
+            <Form.Check
+              type="radio"
+              label="No"
+              name="tratamientoPsicologico"
+              value="no"
+              checked={formData.tratamientoPsicologico === 'no'}
+              onChange={handleChange}
+            />
+          </Form.Group>
+
           {formData.tratamientoPsicologico === 'si' && (
             <Form.Group controlId="tratamientoDetalle">
-              <Form.Label>Detalle del Tratamiento</Form.Label>
+              <Form.Label>Detalle de Tratamiento</Form.Label>
               <Form.Control
                 type="text"
                 name="tratamientoDetalle"
@@ -278,13 +330,12 @@ const FichaSaludPage = () => {
               />
             </Form.Group>
           )}
-        </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={loading}>
-          {loading ? 'Enviando...' : 'Enviar Ficha de Salud'}
-        </Button>
-      </Form>
-    </Container>
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading ? 'Enviando...' : 'Enviar Ficha'}
+          </Button>
+        </Form>
+      </Container>
   );
 };
 

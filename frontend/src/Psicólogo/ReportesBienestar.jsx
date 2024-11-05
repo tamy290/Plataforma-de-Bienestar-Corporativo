@@ -28,7 +28,7 @@ const ReportesBienestar = () => {
     const generarReporte = async () => {
         setLoading(true);
         try {
-            const response = await axios.post('https://localhost:3001/api/psicolog0/reportes-bienestar/generar', {
+            const response = await axios.post('http://localhost:3001/api/psicolog0/reportes-bienestar/generar', {
                 titulo: nuevoReporte.titulo,
                 descripcion: nuevoReporte.descripcion,
                 fecha: new Date().toISOString() // Asumiendo que el backend espera una fecha en formato ISO

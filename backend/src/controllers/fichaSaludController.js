@@ -36,35 +36,9 @@ const fichaSaludController = {
         } = req.body;
 
         try {
-            let fichaSalud = await FichaSalud.findOne({ userId: req.user.id }); // Busca si ya existe una ficha de salud
-            if (fichaSalud) {
-                // Si existe, actualiza
-                fichaSalud = await FichaSalud.findByIdAndUpdate(
-                    fichaSalud._id,
-                    {
-                        nombre,
-                        apellido,
-                        fechaNacimiento,
-                        genero,
-                        domicilio,
-                        telefono,
-                        correo,
-                        contactoEmergencia,
-                        alergias,
-                        medicacionActual,
-                        medicacionDetalle,
-                        historialEnfermedades,
-                        condicionesPreexistentes,
-                        tipoSangre,
-                        tratamientoPsicologico,
-                        tratamientoDetalle
-                    },
-                    { new: true }
-                );
-                return res.json(fichaSalud);
-            } else {
-                // Si no existe, crea una nueva ficha de salud
-                fichaSalud = new FichaSalud({
+            const fichaSalud = await FichaSalud.findOneAndUpdate(
+                { userId: req.user.id }, // Busca si ya existe una ficha de salud
+                {
                     nombre,
                     apellido,
                     fechaNacimiento,
@@ -82,10 +56,10 @@ const fichaSaludController = {
                     tratamientoPsicologico,
                     tratamientoDetalle,
                     userId: req.user.id // Relaciona la ficha de salud con el usuario
-                });
-                await fichaSalud.save();
-                return res.status(201).json(fichaSalud);
-            }
+                },
+                { new: true, upsert: true/*, runValidators: true*/ }
+            );
+            res.status(fichaSalud.createdAt === fichaSalud.updatedAt ? 201 : 200).json(fichaSalud);
         } catch (error) {
             res.status(500).json({ message: 'Error al crear o actualizar la ficha de salud', error });
         }

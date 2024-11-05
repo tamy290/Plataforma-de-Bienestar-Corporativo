@@ -1,41 +1,38 @@
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'; 
 
+// Middleware de autenticación
 const authenticate = (requiredRoles) => (req, res, next) => {
-    const userToken = req.cookies.userToken;    //Obtenemos la cookie con el token
-    if (!userToken) {   //Si no existe la cookie
-        res.status(401).json({
+    const userToken = req.cookies.userToken || req.headers.authorization?.split(' ')[1];
+
+    if (!userToken) {
+        return res.status(401).json({
             errors: {
                 auth: {
-                    message: "¡No autorizado!" //Enviamos un mensaje de error
+                    message: "¡No autorizado!"
                 }
             }
-        });   
-        return;
+        });
     }
 
-    //Si existe la cookie, verificamos el token
     jwt.verify(userToken, process.env.JWT_SECRET, (err, payload) => {
-        if (err) {  //Si hay un error
-            res.status(401).json({
+        if (err) {
+            return res.status(401).json({
                 errors: {
                     auth: {
-                        message: "¡No autorizado!" //Enviamos un mensaje de error
+                        message: "¡No autorizado!"
                     }
                 }
-            });   
-            return;
+            });
         }
 
-        //Si el token es válido, continuamos con el proceso
-        req.user = payload;  //Guardamos el payload en la petición
-
+        req.user = payload; // Aquí tienes acceso al rol del usuario
 
         // Verificar si el usuario tiene el rol necesario
         if (requiredRoles && !requiredRoles.includes(req.user.role)) {
             return res.status(403).json({
                 errors: {
                     auth: {
-                        message: "¡Acceso denegado!" // Enviar mensaje de error si no tiene el rol adecuado
+                        message: "¡Acceso denegado!"
                     }
                 }
             });
@@ -43,7 +40,6 @@ const authenticate = (requiredRoles) => (req, res, next) => {
 
         next();
     });
-
 };
 
-export default authenticate;
+export default authenticate; 

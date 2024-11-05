@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const login = async (req, res) => {
-    //Validemos el usuario y la contraseña
+    //Validamos el usuario y la contraseña
     try {
         const { email, contraseña } = req.body;
         console.log(req.body);
@@ -31,24 +31,24 @@ const login = async (req, res) => {
             return;
         }
         //Generamos el token
-        const token = jwt.sign({ id: user._id, role: user.rol }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id, role: user.rol }, process.env.JWT_SECRET, { expiresIn: "24h" });
 
         let redirectPath;
         switch (user.rol) {
             case 'funcionario':
-                redirectPath = '/dashboard'; //redirige a la página para funcionarios
+                redirectPath = '/dashboard'; 
                 break;
-            case 'psicologa':
-                redirectPath = '/psicologa/dashboard'; //redirige a la página para funcionarios
+            case 'psicologo':
+                redirectPath = '/psicologo/dashboard'; 
                 break;
             case 'admin':
-                redirectPath = '/'; //admin, puede ingresar a donde quiera
+                redirectPath = '/'; //admin
                 break;
             default:
                 return res.status(403).json({ message: 'Rol no reconocido' });
         }
 
-        res.status(200)     //Enviamos el estado 200
+        res.status(200) 
             .cookie("userToken", token, { httpOnly: true }) //Enviamos el token en una cookie
             .json({ token, user: { nombre: user.nombre, rol: user.rol }, redirectPath});   //Enviamos el token en la respuesta
 

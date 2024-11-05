@@ -7,8 +7,8 @@ const router = express.Router();
 //LOGIN
 router.post("/login", sessionController.login);
 //LOGOUT
-router.post("/logout", authenticate(["funcionario", "psicologa", "admin"]), sessionController.logout);
+router.post("/logout", authenticate(["funcionario", "psicologo", "admin"]), sessionController.logout);
 //SESSION
-router.get("/session", authenticate(["funcionario", "psicologa", "admin"]), sessionController.session);
+router.get("/session", authenticate(["funcionario", "psicologo", "admin"]), sessionController.session);
 
 export default router;

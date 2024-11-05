@@ -25,7 +25,7 @@ const ProgresoPage = () => {
             setLoading(true);  // Inicia el estado de carga
             setError(null);     // Elimina cualquier error previo
             try {
-                const response = await axios.get('https://localhost:3001/api/diario-emocional');
+                const response = await axios.get('http://localhost:3001/api/diario-emocional');
                 setEmociones(response.data);
             } catch (err) {
                 console.error('Error al cargar emociones:', err);

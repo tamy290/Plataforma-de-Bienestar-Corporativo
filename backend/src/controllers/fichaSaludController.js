@@ -36,7 +36,7 @@ const fichaSaludController = {
         } = req.body;
 
         try {
-            const fichaSalud = await FichaSalud.findOneAndUpdate(
+            let fichaSalud = await FichaSalud.findOneAndUpdate(
                 { userId: req.user.id }, // Busca si ya existe una ficha de salud
                 {
                     nombre,
@@ -57,7 +57,7 @@ const fichaSaludController = {
                     tratamientoDetalle,
                     userId: req.user.id // Relaciona la ficha de salud con el usuario
                 },
-                { new: true, upsert: true/*, runValidators: true*/ }
+                { new: true, upsert: true }
             );
             res.status(fichaSalud.createdAt === fichaSalud.updatedAt ? 201 : 200).json(fichaSalud);
         } catch (error) {

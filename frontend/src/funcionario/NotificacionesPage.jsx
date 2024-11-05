@@ -11,7 +11,7 @@ const NotificacionesPage = () => {
     //obtener notificaciones desde la API
     const fetchNotificaciones = async () => {
       try {
-        const response = await axios.get('https://localhost:3001/api/notificaciones');
+        const response = await axios.get('http://localhost:3001/api/notificaciones');
         setNotificaciones(response.data);
       } catch (error) {
         setError('Hubo un problema al cargar las notificaciones.');

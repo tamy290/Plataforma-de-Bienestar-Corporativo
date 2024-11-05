@@ -61,7 +61,7 @@ const FichaSaludPage = () => {
       const token = localStorage.getItem('authToken');
 
       const response = await axios.post(
-        'http://localhost:3001/api/ficha',
+        '/api/ficha',
         formData,
         {
           headers: {

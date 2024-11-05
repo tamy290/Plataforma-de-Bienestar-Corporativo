@@ -3,10 +3,13 @@ import express from "express";
 import dbConnect from './config/config.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import userRoute from './src/routes/user.route.js';
+import authenticate from './config/jwt.config.js';
+
+//importaciones de rutas
+import userRoutes from './src/routes/user.route.js';
 import sessionRoutes from './src/routes/session.route.js';
 import fichaSaludRoutes from './src/routes/fichaSaludRoutes.js';
-import authenticate from './config/jwt.config.js';
+import diarioRoutes from './src/routes/diario.route.js'
 
 dotenv.config(); // Cargar las variables de entorno
 const app = express();
@@ -23,11 +26,12 @@ app.use(cors({
 }));
 
 // USO DE RUTAS
-app.use("/api/users", userRoute);
+app.use("/api/users", userRoutes);
 app.use("/api/session", sessionRoutes);
 
 // Middleware para la ruta de ficha con autenticación
 app.use('/api/ficha', authenticate(['admin', 'funcionario', 'psicologo']), fichaSaludRoutes); // Añadir autenticación aquí
+app.use('/api/diario-emocional', authenticate(['admin', 'funcionario']), diarioRoutes);
 
 // Conexión a la base de datos
 dbConnect();

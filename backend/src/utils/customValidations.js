@@ -9,7 +9,12 @@ const validateYear = (year, res) =>{
     }
 }
 
+const validateMedicacion = (value) =>{
+    return this.medicacionActual === "si" ? !!value : true;
+}
+
 export default {
     validateEmail,
-    validateYear
+    validateYear,
+    validateMedicacion
 }

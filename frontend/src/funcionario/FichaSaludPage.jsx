@@ -102,6 +102,10 @@ const FichaSaludPage = () => {
           <li><strong>Correo Electrónico:</strong> {formData.correo}</li>
           <li><strong>Contacto de Emergencia:</strong> {formData.contactoEmergencia}</li>
           <li><strong>Alergias:</strong> {formData.alergias}</li>
+          <li><strong>Medicación Actual:</strong> {formData.medicacionActual === 'si' ? 'Sí' : 'No'}</li>
+          {formData.medicacionActual === 'si' && (
+            <li><strong>Detalle de la Medicación:</strong> {formData.medicacionDetalle}</li>
+          )}
           <li><strong>Historial de Enfermedades:</strong> {formData.historialEnfermedades}</li>
           <li><strong>Condiciones Preexistentes:</strong> {formData.condicionesPreexistentes}</li>
           <li><strong>Tipo de Sangre:</strong> {formData.tipoSangre}</li>

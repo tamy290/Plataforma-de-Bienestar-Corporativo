@@ -1,5 +1,6 @@
 import {model, Schema} from 'mongoose';
 import bcrypt from 'bcrypt'
+import customValidations from '../utils/customValidations.js';
 
 const UserSchema = new Schema({
     nombre: {
@@ -13,7 +14,8 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: [true, '¡El email ya existe!']
+        unique: [true, '¡El email ya existe!'],
+        validate: [customValidations.validateEmail, "Ingrese un email válido"]
     },
     contraseña: {
         type: String, 

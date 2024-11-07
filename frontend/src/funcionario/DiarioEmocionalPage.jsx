@@ -167,7 +167,7 @@ const DiarioEmocionalPage = () => {
                 ))}
             </ListGroup>
 
-            {/* Modal de Confirmación */}
+           
             <Modal show={showConfirmModal} onHide={handleCloseConfirmModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirmar Eliminación</Modal.Title>

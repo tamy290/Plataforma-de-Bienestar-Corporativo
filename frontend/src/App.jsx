@@ -16,6 +16,10 @@ import FichaSaludFuncionario from './Psicólogo/FichaSaludFuncionario';
 import HistorialFuncionario from './Psicólogo/HistorialFuncionario';
 import ReportesBienestar from './Psicólogo/ReportesBienestar';
 import SesionesVideo from './Psicólogo/SesionesVideos';
+import DashboardAdmin from './administrador/DashboardAdmin';
+import EstadisticasUso from './administrador/EstadisticasUso';
+import GestionUsuarios from './administrador/GestionUsuarios';
+import SeguridadDatos from './administrador/SeguridadDatos';
 
 const App = () => {
     return (
@@ -37,6 +41,10 @@ const App = () => {
                         <Route path="/psicologohistorial-funcionario" element={<HistorialFuncionario/>}/>
                         <Route path="/psicologo/reportes-bienestar" element={<ReportesBienestar />} />
                         <Route path="/sesiones-video" element={<SesionesVideo />} />
+                        <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+                        <Route path="/admin/estadisticas" element={<EstadisticasUso />} />
+                        <Route path="/admin/gestion-usuarios" element={<GestionUsuarios />} />
+                        <Route path="/admin/seguridad-datos" element={<SeguridadDatos />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>

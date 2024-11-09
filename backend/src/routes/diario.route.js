@@ -10,4 +10,8 @@ router.get('/', authenticate(), diarioController.getDiario);
 // Crear o actualizar el diario emocional
 router.post('/', authenticate(), diarioController.agregarAnotacion); // Llama al middleware aquí
 
+// Eliminar una anotación del diario emocional
+router.delete('/:anotacionId', authenticate(), diarioController.eliminarAnotacion);
+
 export default router;
+

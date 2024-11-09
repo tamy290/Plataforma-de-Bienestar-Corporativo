@@ -11,5 +11,3 @@ router.get('/', authenticate(), fichaSaludController.getFichaSalud); // Llama al
 router.post('/', authenticate(), fichaSaludController.createOrUpdateFichaSalud); // Llama al middleware aquí
 
 export default router;
-
-

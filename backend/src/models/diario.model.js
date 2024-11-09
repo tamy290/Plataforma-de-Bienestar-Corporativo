@@ -1,11 +1,9 @@
 import {model, Schema, Types} from 'mongoose';
-import customValidations from '../utils/customValidations.js';
 
 const anotacionSchema = new Schema({
     fechaAnotacion: { 
         type: Date, 
         required: true,
-        validate: [customValidations.validateYear, 'Ingrese un año válido'] 
     },
     emociones: {
         type: String,

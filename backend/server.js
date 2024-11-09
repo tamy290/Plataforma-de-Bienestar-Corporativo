@@ -4,8 +4,6 @@ import dbConnect from './config/config.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authenticate from './config/jwt.config.js';
-
-//importaciones de rutas
 import userRoutes from './src/routes/user.route.js';
 import sessionRoutes from './src/routes/session.route.js';
 import fichaSaludRoutes from './src/routes/fichaSaludRoutes.js';

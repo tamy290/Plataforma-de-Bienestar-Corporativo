@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
-import logo from '../assets/logo-.png'
+
 
 const Header = () => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Header = () => {
 
     return (
         <>
-        < Navbar bg="success" expand="lg" className="shadow-sm" style={{ width: '1300px', height: '100px' }} >
+        < Navbar bg="success" expand="lg" className="shadow-sm" style={{ width: '1350px', height: '100px' }} >
             <Navbar.Brand 
                 style={{ 
                     fontFamily: 'Montserrat, sans-serif', 
@@ -22,8 +22,6 @@ const Header = () => {
                     color: '#4CAF50' 
                 }}
             >
-      <img src={logo} alt="Logo de la empresa" className="img-fluid" />
-
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

@@ -1,4 +1,3 @@
-// controlador para psicólogo
 import FichaSalud from './models/fichaSalud.js';
 
 const fichaSaludController = {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
+import logo from '../assets/logo-.png'
 
 const Header = () => {
     const navigate = useNavigate();
@@ -12,7 +13,8 @@ const Header = () => {
     };
 
     return (
-        <Navbar bg="light" expand="lg" className="shadow-sm">
+        <>
+        < Navbar bg="success" expand="lg" className="shadow-sm" style={{ width: '1300px', height: '100px' }} >
             <Navbar.Brand 
                 style={{ 
                     fontFamily: 'Montserrat, sans-serif', 
@@ -20,11 +22,12 @@ const Header = () => {
                     color: '#4CAF50' 
                 }}
             >
-                <span>Vita</span><span style={{ color: '#009688' }}>Lab</span>
+      <img src={logo} alt="Logo de la empresa" className="img-fluid" />
+
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ms-auto py-2 px-2"> {/* Agregado padding vertical y horizontal */}
+                <Nav className="ms-auto py-2 px-2"> {/* para agregar padding vertical y horizontal */}
                     {isAuthenticated ? (
                         <Button variant="outline-danger" onClick={handleLogout}>
                             Cerrar Sesión
@@ -32,21 +35,19 @@ const Header = () => {
                     ) : (
                         <>
                             <Link to="/login">
-                                <Button variant="outline-primary" className="me-2">Iniciar Sesión</Button>
+                                <Button variant="light" className="me-2">Iniciar Sesión</Button>
                             </Link>
                             <Link to="/registro">
-                                <Button variant="outline-primary">Registrarse</Button>
+                                <Button variant="light">Registrarse</Button>
                             </Link>
                         </>
                     )}
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
+        </>
     );
 };
 
 export default Header;
-
-
-
 

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Form, Button, Row, Col, ListGroup, Modal } from 'react-bootstrap';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Container, Form, Button, Row, Col, ListGroup, Modal } from "react-bootstrap";
+import axios from "axios";
+import { format } from "date-fns";
 
 const DiarioEmocionalPage = () => {
     const [formData, setFormData] = useState({
-        fechaAnotacion: '',
-        emociones: '',
-        comentario: '',
+        fechaAnotacion: "",
+        emociones: "",
+        comentario: "",
     });
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
@@ -16,19 +16,19 @@ const DiarioEmocionalPage = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [emotionToDelete, setEmotionToDelete] = useState(null);
 
+    // Cargar las anotaciones desde la API al montar el componente
     useEffect(() => {
         const fetchEmociones = async () => {
             setLoading(true);
-            const token = localStorage.getItem('authToken');
+            const token = localStorage.getItem("authToken");
             try {
-                const response = await axios.get('/api/diario-emocional', {
-                    headers: { 'Authorization': `Bearer ${token}` },
+                const response = await axios.get("/api/diario-emocional", {
+                    headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });
                 setAnotaciones(response.data);
             } catch (err) {
                 setError(`Error al cargar el diario emocional: ${err.message}`);
-
             } finally {
                 setLoading(false);
             }
@@ -48,19 +48,29 @@ const DiarioEmocionalPage = () => {
         setError(null);
         setSuccess(null);
 
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem("authToken");
         try {
-            const response = await axios.post('http://localhost:3001/api/diario-emocional', formData, {
-                headers: { 'Authorization': `Bearer ${token}` },
+            // Realizar el POST para registrar la emoción
+            const response = await axios.post("/api/diario-emocional", formData, {
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (response.status === 201) {
-                setSuccess('Emoción registrada exitosamente.');
-                setAnotaciones([...anotaciones, response.data]);
-                setFormData({ fechaAnotacion: '', emociones: '', comentario: '' });
+                setSuccess("Emoción registrada exitosamente.");
+                // Actualizar las anotaciones para reflejar los nuevos datos
+                setAnotaciones((prevAnotaciones) => [
+                    ...prevAnotaciones,
+                    response.data, // Asumiendo que la respuesta contiene la nueva anotación
+                ]);
+                // para limpiar el formulario
+                setFormData({
+                    fechaAnotacion: "",
+                    emociones: "",
+                    comentario: "",
+                });
             }
         } catch (err) {
-            setError('Error al registrar la emoción. Intenta de nuevo más tarde.');
+            setError("Error al registrar la emoción. Intenta de nuevo más tarde.");
         } finally {
             setLoading(false);
         }
@@ -71,18 +81,21 @@ const DiarioEmocionalPage = () => {
         setError(null);
         setSuccess(null);
 
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem("authToken");
         try {
             const response = await axios.delete(`/api/diario-emocional/${fechaAnotacion}`, {
-                headers: { 'Authorization': `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (response.status === 200) {
-                setSuccess('Emoción eliminada exitosamente.');
-                setAnotaciones(anotaciones.filter(anotacion => anotacion.fechaAnotacion !== fechaAnotacion));
+                setSuccess("Emoción eliminada exitosamente.");
+                // Eliminar la emoción de la lista sin necesidad de recargar
+                setAnotaciones((prevAnotaciones) =>
+                    prevAnotaciones.filter((anotacion) => anotacion.fechaAnotacion !== fechaAnotacion)
+                );
             }
         } catch (err) {
-            setError('Error al eliminar la emoción. Intenta de nuevo más tarde.');
+            setError("Error al eliminar la emoción. Intenta de nuevo más tarde.");
         } finally {
             setLoading(false);
             setShowConfirmModal(false);
@@ -97,6 +110,11 @@ const DiarioEmocionalPage = () => {
     const handleCloseConfirmModal = () => {
         setShowConfirmModal(false);
         setEmotionToDelete(null);
+    };
+
+    // Función para formatear la fecha a dd/MM/yyyy usando date-fns
+    const formatearFecha = (fecha) => {
+        return format(new Date(fecha), "dd/MM/yyyy");
     };
 
     return (
@@ -149,40 +167,39 @@ const DiarioEmocionalPage = () => {
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={loading}>
-                    {loading ? 'Guardando...' : 'Guardar Emoción'}
+                    {loading ? "Guardando..." : "Guardar Emoción"}
                 </Button>
             </Form>
 
             <h2 className="mt-4">Emociones Registradas</h2>
             <ListGroup>
                 {anotaciones.map((anotacion, index) => (
-                    <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+                    <ListGroup.Item
+                        key={index}
+                        className="d-flex justify-content-between align-items-center"
+                    >
                         <span>
-                            <strong>{anotacion.fechaAnotacion}</strong>: {anotacion.emociones} - {anotacion.comentario}
+                            <strong>{formatearFecha(anotacion.fechaAnotacion)}</strong>:{" "}
+                            {anotacion.emociones} - {anotacion.comentario}
                         </span>
-                        <Button variant="danger" onClick={() => handleShowConfirmModal(em.fecha)}>
-                            Eliminar
-                        </Button>
+                        <Button variant="danger" onClick={() => handleShowConfirmModal(anotacion.fechaAnotacion)}>Eliminar</Button>
                     </ListGroup.Item>
                 ))}
             </ListGroup>
 
-           
             <Modal show={showConfirmModal} onHide={handleCloseConfirmModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirmar Eliminación</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>¿Estás seguro de que deseas eliminar esta emoción registrada?</p>
-                    <p><strong>Fecha:</strong> {emotionToDelete}</p>
+                    <p>
+                        <strong>Fecha:</strong> {emotionToDelete}
+                    </p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseConfirmModal}>
-                        Cancelar
-                    </Button>
-                    <Button variant="danger" onClick={() => handleDelete(emotionToDelete)}>
-                        Eliminar
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseConfirmModal}> Cancelar</Button>
+                    <Button variant="danger" onClick={() => handleDelete(emotionToDelete)}> Eliminar</Button>
                 </Modal.Footer>
             </Modal>
         </Container>

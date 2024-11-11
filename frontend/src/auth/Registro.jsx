@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Container, Alert, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const Registro = () => {
@@ -10,15 +10,25 @@ const Registro = () => {
     const [confirmarContraseña, setConfirmarContraseña] = useState('');
     const [rol, setRol] = useState('');
     const [error, setError] = useState('');
+    const [foto, setFoto] = useState(null); // Estado para la foto
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const navigate = useNavigate();
+
+    // Verificar si hay un token en localStorage
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            setIsAuthenticated(true);
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         // Validar contraseñas
-        if (contraseña !== confirmarContraseña) { 
+        if (contraseña !== confirmarContraseña) {
             setError('Las contraseñas no coinciden');
             return;
         }
@@ -42,6 +52,7 @@ const Registro = () => {
             email,
             contraseña,
             rol,
+            foto, // Agregar foto al formulario
         };
 
         try {
@@ -59,24 +70,51 @@ const Registro = () => {
             }
 
             const data = await response.json();
+            // Guardamos el token en el localStorage al registrar al usuario
+            localStorage.setItem('authToken', data.token);
+            setIsAuthenticated(true);
             navigate(data.redirectPath || '/dashboard');
 
+            // Limpiar los campos
             setNombre('');
             setApellido('');
             setEmail('');
             setContraseña('');
-            setConfirmarContraseña(''); 
+            setConfirmarContraseña('');
             setRol('');
+            setFoto(null); // Limpiar la foto
             setError('');
         } catch (error) {
             setError(error.message);
         }
     };
 
+    // Función para manejar el cambio de imagen
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFoto(reader.result); // Guardar la imagen en base64
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Función para cerrar sesión
+    const handleLogout = () => {
+        // Eliminar el token de localStorage
+        localStorage.removeItem('authToken');
+        setIsAuthenticated(false);
+        // Redirigir al login
+        navigate('/login');  
+    };
+
     return (
         <Container>
             <h2>Registro</h2>
             {error && <Alert variant="danger">{error}</Alert>}
+
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formNombre">
                     <Form.Label>Nombre</Form.Label>
@@ -144,13 +182,40 @@ const Registro = () => {
                         autoComplete="new-password"
                     />
                 </Form.Group>
+
+                {/* Campo para cargar la foto */}
+                <Form.Group controlId="formFoto">
+                    <Form.Label>Sube tu foto</Form.Label>
+                    <Form.Control
+                        type="file"
+                        onChange={handleImageChange}
+                    />
+                </Form.Group>
+
                 <Button variant="primary" type="submit">
                     Registrarse
                 </Button>
             </Form>
+
+            {/* Mostrar el nombre y foto si el usuario está autenticado */}
+            {isAuthenticated && (
+                <div className="mt-3">
+                    <h3>Bienvenido, {nombre} {apellido}</h3>
+                    {foto ? (
+                        <Image src={foto} alt="Foto de perfil" roundedCircle width={100} height={100} />
+                    ) : (
+                        <div>No se ha subido una foto</div>
+                    )}
+                    <Button variant="danger" onClick={handleLogout} className="mt-3">
+                        Cerrar sesión
+                    </Button>
+                </div>
+            )}
         </Container>
     );
 };
 
 export default Registro;
+
+
 

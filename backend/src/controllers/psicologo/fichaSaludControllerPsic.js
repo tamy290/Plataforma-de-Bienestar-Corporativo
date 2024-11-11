@@ -11,14 +11,14 @@ const fichaSaludController = {
                 return res.status(400).json({ message: 'ID de funcionario no válido' });
             }
 
-            // Buscar la ficha de salud del funcionario
+            // buscar la ficha de salud del funcionario
             const fichaSalud = await FichaSalud.findOne({ userId: funcionarioId });
 
             if (!fichaSalud) {
                 return res.status(404).json({ message: 'Ficha de salud no encontrada' });
             }
 
-            // Enviar la ficha de salud del funcionario
+            // para enviar la ficha de salud del funcionario
             res.json(fichaSalud);
         } catch (error) {
             res.status(500).json({ message: 'Error al obtener la ficha de salud', error });

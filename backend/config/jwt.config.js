@@ -27,7 +27,7 @@ const authenticate = (requiredRoles) => (req, res, next) => {
 
         req.user = payload; // Aquí tienes acceso al rol del usuario
 
-        // Verificar si el usuario tiene el rol necesario
+        // Verifica si el usuario tiene el rol necesario
         if (requiredRoles && !requiredRoles.includes(req.user.role)) {
             return res.status(403).json({
                 errors: {
@@ -42,4 +42,4 @@ const authenticate = (requiredRoles) => (req, res, next) => {
     });
 };
 
-export default authenticate; 
+export default authenticate;

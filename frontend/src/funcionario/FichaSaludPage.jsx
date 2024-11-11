@@ -33,23 +33,40 @@ const FichaSaludPage = () => {
   };
 
   useEffect(() => {
-    const fetchFichaSalud = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get('/api/ficha', { withCredentials: true });
-        if (response.data) {
-          setFormData(response.data);
-          setFichaCompleta(true);
-        }
-      } catch (err) {
-        console.error('Error al cargar la ficha de salud:', err);
-      } finally {
-        setLoading(false);
+    // Cargar la ficha de salud del usuario
+    const fetchHealthRecord = async () => {
+      const response = await axios.get('/api/ficha-salud');
+      const data = response.data;
+  
+      // Si la ficha está vacía, inicializa con valores vacíos
+      if (!data.nombre && !data.apellido) {
+        setFormData({
+          nombre: '',
+          apellido: '',
+          fechaNacimiento: '',
+          genero: '',
+          domicilio: '',
+          telefono: '',
+          correo: '',
+          contactoEmergencia: '',
+          alergias: '',
+          medicacionActual: '',
+          medicacionDetalle: '',
+          historialEnfermedades: '',
+          condicionesPreexistentes: '',
+          tipoSangre: '',
+          tratamientoPsicologico: '',
+          tratamientoDetalle: ''
+        });
+      } else {
+        // Si la ficha no está vacía, precarga los datos
+        setFormData(data);
       }
     };
-    fetchFichaSalud();
+  
+    fetchHealthRecord();
   }, []);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -151,8 +168,212 @@ const FichaSaludPage = () => {
             </Form.Group>
           </Col>
         </Row>
-        {/* Otros campos aquí... */}
-        
+        <Row>
+          <Col md={6}>
+            <Form.Group controlId="fechaNacimiento">
+              <Form.Label>Fecha de Nacimiento</Form.Label>
+              <Form.Control
+                type="date"
+                name="fechaNacimiento"
+                value={formData.fechaNacimiento}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="genero">
+              <Form.Label>Género</Form.Label>
+              <Form.Control
+                as="select"
+                name="genero"
+                value={formData.genero}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Selecciona género</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+                <option value="otro">Otro</option>
+              </Form.Control>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <Form.Group controlId="domicilio">
+              <Form.Label>Domicilio</Form.Label>
+              <Form.Control
+                type="text"
+                name="domicilio"
+                value={formData.domicilio}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="telefono">
+              <Form.Label>Teléfono</Form.Label>
+              <Form.Control
+                type="text"
+                name="telefono"
+                value={formData.telefono}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <Form.Group controlId="correo">
+              <Form.Label>Correo Electrónico</Form.Label>
+              <Form.Control
+                type="email"
+                name="correo"
+                value={formData.correo}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="contactoEmergencia">
+              <Form.Label>Contacto de Emergencia</Form.Label>
+              <Form.Control
+                type="text"
+                name="contactoEmergencia"
+                value={formData.contactoEmergencia}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+  <Col md={6}>
+    <Form.Group controlId="alergias">
+      <Form.Label>Alergias</Form.Label>
+      <Form.Control
+        type="text"
+        name="alergias"
+        value={formData.alergias}
+        onChange={handleChange}
+      />
+    </Form.Group>
+  </Col>
+  <Col md={6}>
+    <Form.Group controlId="medicacionActual">
+      <Form.Label>¿Estás tomando medicación actual?</Form.Label>
+      <Form.Control
+        as="select"
+        name="medicacionActual"
+        value={formData.medicacionActual}
+        onChange={handleChange}
+      >
+        <option value="no">No</option>
+        <option value="si">Sí</option>
+      </Form.Control>
+    </Form.Group>
+  </Col>
+</Row>
+
+{formData.medicacionActual === 'si' && (
+  <Row>
+    <Col md={12}>
+      <Form.Group controlId="medicacionDetalle">
+        <Form.Label>Detalle de la Medicación</Form.Label>
+        <Form.Control
+          type="text"
+          name="medicacionDetalle"
+          value={formData.medicacionDetalle}
+          onChange={handleChange}
+        />
+      </Form.Group>
+    </Col>
+  </Row>
+)}
+
+<Row>
+  <Col md={6}>
+    <Form.Group controlId="historialEnfermedades">
+      <Form.Label>Historial de Enfermedades</Form.Label>
+      <Form.Control
+        type="text"
+        name="historialEnfermedades"
+        value={formData.historialEnfermedades}
+        onChange={handleChange}
+      />
+    </Form.Group>
+  </Col>
+  <Col md={6}>
+    <Form.Group controlId="condicionesPreexistentes">
+      <Form.Label>Condiciones Preexistentes</Form.Label>
+      <Form.Control
+        type="text"
+        name="condicionesPreexistentes"
+        value={formData.condicionesPreexistentes}
+        onChange={handleChange}
+      />
+    </Form.Group>
+  </Col>
+</Row>
+
+<Row>
+  <Col md={6}>
+    <Form.Group controlId="tipoSangre">
+      <Form.Label>Tipo de Sangre</Form.Label>
+      <Form.Control
+        as="select"
+        name="tipoSangre"
+        value={formData.tipoSangre}
+        onChange={handleChange}
+      >
+        <option value="">Selecciona tipo de sangre</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+      </Form.Control>
+    </Form.Group>
+  </Col>
+  <Col md={6}>
+    <Form.Group controlId="tratamientoPsicologico">
+      <Form.Label>¿Estás recibiendo tratamiento psicológico?</Form.Label>
+      <Form.Control
+        as="select"
+        name="tratamientoPsicologico"
+        value={formData.tratamientoPsicologico}
+        onChange={handleChange}
+      >
+        <option value="no">No</option>
+        <option value="si">Sí</option>
+      </Form.Control>
+    </Form.Group>
+  </Col>
+</Row>
+
+{formData.tratamientoPsicologico === 'si' && (
+  <Row>
+    <Col md={12}>
+      <Form.Group controlId="tratamientoDetalle">
+        <Form.Label>Detalle de Tratamiento Psicológico</Form.Label>
+        <Form.Control
+          type="text"
+          name="tratamientoDetalle"
+          value={formData.tratamientoDetalle}
+          onChange={handleChange}
+        />
+      </Form.Group>
+    </Col>
+  </Row>
+)}
+
         <Button variant="primary" type="submit" disabled={loading}>
           {loading ? 'Enviando...' : 'Enviar Ficha'}
         </Button>
@@ -162,3 +383,4 @@ const FichaSaludPage = () => {
 };
 
 export default FichaSaludPage;
+

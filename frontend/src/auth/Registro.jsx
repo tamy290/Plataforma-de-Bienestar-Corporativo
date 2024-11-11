@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Alert, Image } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const Registro = () => {
@@ -10,37 +10,29 @@ const Registro = () => {
     const [confirmarContraseña, setConfirmarContraseña] = useState('');
     const [rol, setRol] = useState('');
     const [error, setError] = useState('');
-    const [foto, setFoto] = useState(null); // Estado para la foto
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const navigate = useNavigate();
-
-    // Verificar si hay un token en localStorage
-    useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            setIsAuthenticated(true);
-        }
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccessMessage('');
 
         // Validar contraseñas
-        if (contraseña !== confirmarContraseña) {
+        if (contraseña !== confirmarContraseña) { 
             setError('Las contraseñas no coinciden');
             return;
         }
 
-        // Validar el formato del email
+        // Valida el formato del email
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             setError('Por favor, ingresa un correo electrónico válido');
             return;
         }
 
-        // Validar la contraseña
+        // Valida la contraseña
         if (contraseña.length < 6) {
             setError('La contraseña debe tener al menos 6 caracteres');
             return;
@@ -52,7 +44,6 @@ const Registro = () => {
             email,
             contraseña,
             rol,
-            foto, // Agregar foto al formulario
         };
 
         try {
@@ -64,44 +55,45 @@ const Registro = () => {
                 body: JSON.stringify(formData),
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error en el registro');
+            const data = await response.json();
+
+            if (response.ok) {
+               
+                setSuccessMessage(data.message);
+
+                // Guarda el token en el localStorage
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userData', JSON.stringify({
+                    nombre: data.nombre,
+                    apellido: data.apellido,
+                    rol: data.rol,
+                }));
+
+                // Redirigir según el rol
+                navigate(data.redirectPath);
             }
 
-            const data = await response.json();
-            // Guardamos el token en el localStorage al registrar al usuario
-            localStorage.setItem('authToken', data.token);
-            setIsAuthenticated(true);
-            navigate(data.redirectPath || '/dashboard');
+            if (!response.ok) {
+                throw new Error(data.message || 'Error en el registro');
+            }
 
-            // Limpiar los campos
+            // Resetear el formulario
             setNombre('');
             setApellido('');
             setEmail('');
             setContraseña('');
-            setConfirmarContraseña('');
+            setConfirmarContraseña(''); 
             setRol('');
-            setFoto(null); // Limpiar la foto
-            setError('');
         } catch (error) {
             setError(error.message);
         }
-    };
-    // Función para cerrar sesión
-    const handleLogout = () => {
-        // Eliminar el token de localStorage
-        localStorage.removeItem('authToken');
-        setIsAuthenticated(false);
-        // Redirigir al login
-        navigate('/login');  
     };
 
     return (
         <Container>
             <h2>Registro</h2>
             {error && <Alert variant="danger">{error}</Alert>}
-
+            {successMessage && <Alert variant="success">{successMessage}</Alert>}
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formNombre">
                     <Form.Label>Nombre</Form.Label>
@@ -133,7 +125,7 @@ const Registro = () => {
                     >
                         <option value="">Selecciona un rol</option>
                         <option value="funcionario">Funcionario</option>
-                        <option value="psicologo">Psicólogo</option>
+                        <option value="psicologo">Psicologo</option>
                         <option value="admin">Admin</option>
                     </Form.Control>
                 </Form.Group>
@@ -155,7 +147,6 @@ const Registro = () => {
                         value={contraseña}
                         onChange={(e) => setContraseña(e.target.value)} 
                         required
-                        autoComplete="new-password"
                     />
                 </Form.Group>
                 <Form.Group controlId="formConfirmarContraseña">
@@ -166,28 +157,14 @@ const Registro = () => {
                         value={confirmarContraseña}
                         onChange={(e) => setConfirmarContraseña(e.target.value)} 
                         required
-                        autoComplete="new-password"
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Registrarse
                 </Button>
             </Form>
-
-            {/* Mostrar el nombre y foto si el usuario está autenticado */}
-            {isAuthenticated && (
-                <div className="mt-3">
-                    <h3>Bienvenido, {nombre} {apellido}</h3>
-                    <Button variant="danger" onClick={handleLogout} className="mt-3">
-                        Cerrar sesión
-                    </Button>
-                </div>
-            )}
         </Container>
     );
 };
 
 export default Registro;
-
-
-

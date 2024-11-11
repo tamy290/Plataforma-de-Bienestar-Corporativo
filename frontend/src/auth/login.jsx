@@ -20,36 +20,43 @@ const Login = () => {
         };
 
         try {
+            // Realizamos la solicitud de inicio de sesión
             const response = await fetch('/api/session/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include',
-                body: JSON.stringify(formData),
+                credentials: 'include', //  envío y recepción de cookies
+                body: JSON.stringify(formData), // Convertimos los datos en JSON
             });
 
+            // Verificar si la respuesta fue exitosa
             if (response.ok) {
                 const data = await response.json();
+
+                // Redirige según el rol del usuario
                 navigate(data.redirectPath);
                 console.log('Inicio de sesión exitoso');
+                
+                // Resetear el formulario
                 setEmail('');
                 setContraseña('');
             } else {
-                const errorData = await response.json();
+                // Manejar errores si la respuesta no fue exitosa
+                const errorData = await response.json(); // Leer el cuerpo del error
                 throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
         } catch (error) {
-            setError(error.message);
+            setError(error.message); // Mostrar el mensaje de error
         } finally {
-            setLoading(false); // Detener carga
+            setLoading(false); // Detener la carga
         }
     };
 
     return (
         <Container>
             <h2>Iniciar Sesión</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert variant="danger">{error}</Alert>} {/* Mostrar errores */}
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formEmail">
                     <Form.Label>Email</Form.Label>
@@ -79,4 +86,5 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Login;  
+

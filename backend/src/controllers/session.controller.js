@@ -36,7 +36,7 @@ const login = async (req, res) => {
         let redirectPath;
         switch (user.rol) {
             case 'funcionario':
-                redirectPath = '/dashboard'; 
+                redirectPath = '/funcionario/dashboard'; 
                 break;
             case 'psicologo':
                 redirectPath = '/psicologo/dashboard'; 

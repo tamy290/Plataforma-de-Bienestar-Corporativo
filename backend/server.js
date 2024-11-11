@@ -4,12 +4,12 @@ import dbConnect from './config/config.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authenticate from './config/jwt.config.js';
-import multer from 'multer';  // Importar multer para manejar la carga de archivos
+import multer from 'multer';  
 import userRoutes from './src/routes/user.route.js';
 import sessionRoutes from './src/routes/session.route.js';
 import fichaSaludRoutes from './src/routes/fichaSaludRoutes.js';
 import diarioRoutes from './src/routes/diario.route.js';
-import { uploadProfilePhoto } from './src/controllers/user.controller.js';  // Asegúrate de importar el controlador
+import { uploadProfilePhoto } from './src/controllers/user.controller.js'; 
 
 dotenv.config(); // Cargar las variables de entorno
 

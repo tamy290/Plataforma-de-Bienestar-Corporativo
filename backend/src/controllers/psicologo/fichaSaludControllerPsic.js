@@ -1,4 +1,5 @@
-import FichaSalud from './models/fichaSalud.js';
+import FichaSalud from '../models/fichaSalud.js';
+import mongoose from 'mongoose';
 
 const fichaSaludController = {
     // ficha de salud de un funcionario por su ID
@@ -11,22 +12,20 @@ const fichaSaludController = {
                 return res.status(400).json({ message: 'ID de funcionario no válido' });
             }
 
-            // buscar la ficha de salud del funcionario
+            // Buscar la ficha de salud del funcionario
             const fichaSalud = await FichaSalud.findOne({ userId: funcionarioId });
 
             if (!fichaSalud) {
                 return res.status(404).json({ message: 'Ficha de salud no encontrada' });
             }
 
-            // para enviar la ficha de salud del funcionario
-            res.json(fichaSalud);
+            // Enviar la ficha de salud del funcionario
+            res.status(200).json(fichaSalud);
         } catch (error) {
-            res.status(500).json({ message: 'Error al obtener la ficha de salud', error });
+            console.error(error); // Log para debugging
+            res.status(500).json({ message: 'Error al obtener la ficha de salud', error: error.message });
         }
     },
 };
 
 export default fichaSaludController;
-
-
-// malu soy, cualquier cosa avisenme para cambiar, muy probablemente tenga errores jeje

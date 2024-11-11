@@ -50,7 +50,18 @@ export const create = async (req, res) => {
             }
 
             const newElement = await User.create(data);
-            res.status(201).json(newElement);
+
+            // Dependiendo del rol, agregar el path de redirección
+            let redirectPath = '/';
+            if (newElement.rol === 'funcionario') {
+                redirectPath = '/funcionario/dashboard';
+            } else if (newElement.rol === 'psicologo') {
+                redirectPath = '/psicologo/dashboard';
+            } else if (newElement.rol === 'admin') {
+                redirectPath = '/admin/dashboard';
+            }
+
+            res.status(201).json({ ...newElement, redirectPath }); // Enviar la ruta de redirección
         });
     } catch (error) {
         console.error(error);
@@ -67,5 +78,3 @@ export default {
     create,
     uploadProfilePhoto
 };
-
-

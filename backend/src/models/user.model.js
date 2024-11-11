@@ -21,10 +21,6 @@ const UserSchema = new Schema({
         type: String, 
         required: true
     },
-    foto: {
-        type: String, 
-        default: null  // Aquí se almacena la ruta de la foto
-    },
     rol: {
         type: String,
         enum: ['funcionario', 'psicologo', 'admin'],

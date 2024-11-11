@@ -47,7 +47,6 @@ const login = async (req, res) => {
             default:
                 return res.status(403).json({ message: 'Rol no reconocido' });
         }
-
         res.status(200) 
             .cookie("userToken", token, { httpOnly: true }) //Enviamos el token en una cookie
             .json({ token, user: { nombre: user.nombre, rol: user.rol }, redirectPath});   //Enviamos el token en la respuesta

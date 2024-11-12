@@ -47,7 +47,7 @@ const Login = () => {
                 throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
         } catch (error) {
-            setError(error.message); // Mostrar el mensaje de error
+            setError('Error de conexión con el servidor'); // Mostrar el mensaje de error
         } finally {
             setLoading(false); // Detener la carga
         }

@@ -5,6 +5,7 @@ const fichaSaludController = {
     getFichaSalud: async (req, res) => {
         try {
             const fichaSalud = await FichaSalud.findOne({ userId: req.user.id }); // Busca la ficha de salud por el ID del usuario
+            console.log(fichaSalud);
             if (!fichaSalud) {
                 return res.status(404).json({ message: 'Ficha de salud no encontrada' });
             }

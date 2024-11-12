@@ -29,7 +29,7 @@ app.use(cors({
 app.use("/api/users", userRoutes);
 app.use("/api/session", sessionRoutes);
 
-app.use('/api/ficha', authenticate(['admin', 'funcionario', 'psicologo']), fichaSaludRoutes);
+app.use('/api/ficha-salud', authenticate(['admin', 'funcionario']), fichaSaludRoutes);
 app.use('/api/diario-emocional', authenticate(['admin', 'funcionario']), diarioRoutes);
 
 // Conexión a la base de datos y manejo de errores

@@ -35,32 +35,37 @@ const FichaSaludPage = () => {
   useEffect(() => {
     // Cargar la ficha de salud del usuario
     const fetchHealthRecord = async () => {
-      const response = await axios.get('/api/ficha-salud');
-      const data = response.data;
+      try {
+        const response = await axios.get('/api/ficha-salud');
+        const data = response.data;
   
-      // Si la ficha está vacía, inicializa con valores vacíos
-      if (!data.nombre && !data.apellido) {
-        setFormData({
-          nombre: '',
-          apellido: '',
-          fechaNacimiento: '',
-          genero: '',
-          domicilio: '',
-          telefono: '',
-          correo: '',
-          contactoEmergencia: '',
-          alergias: '',
-          medicacionActual: '',
-          medicacionDetalle: '',
-          historialEnfermedades: '',
-          condicionesPreexistentes: '',
-          tipoSangre: '',
-          tratamientoPsicologico: '',
-          tratamientoDetalle: ''
-        });
-      } else {
-        // Si la ficha no está vacía, precarga los datos
-        setFormData(data);
+        if (!data || Object.keys(data).length === 0) {
+          setFichaCompleta(false);
+          setFormData({
+            nombre: '',
+            apellido: '',
+            fechaNacimiento: '',
+            genero: '',
+            domicilio: '',
+            telefono: '',
+            correo: '',
+            contactoEmergencia: '',
+            alergias: '',
+            medicacionActual: 'no',
+            medicacionDetalle: '',
+            historialEnfermedades: '',
+            condicionesPreexistentes: '',
+            tipoSangre: '',
+            tratamientoPsicologico: 'no',
+            tratamientoDetalle: ''
+          });
+        } else {
+          setFichaCompleta(true);
+          setFormData(data);
+        }
+      } catch (err) {
+        console.error('Error al obtener la ficha de salud', err);
+        setError('Hubo un problema al obtener la ficha de salud');
       }
     };
   
